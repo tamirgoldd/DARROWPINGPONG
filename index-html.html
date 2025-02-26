@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Ping Pong Tracker</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1><i class="fas fa-table-tennis"></i> Office Ping Pong Tracker</h1>
+            <nav>
+                <button id="nav-dashboard" class="nav-btn active"><i class="fas fa-home"></i> Dashboard</button>
+                <button id="nav-newgame" class="nav-btn"><i class="fas fa-plus-circle"></i> New Game</button>
+                <button id="nav-players" class="nav-btn"><i class="fas fa-users"></i> Players</button>
+                <button id="nav-history" class="nav-btn"><i class="fas fa-history"></i> History</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view">
+                <div class="dashboard-grid">
+                    <div class="card leaderboard-card">
+                        <h2>Top Players</h2>
+                        <div id="leaderboard-container"></div>
+                    </div>
+                    <div class="card recent-games-card">
+                        <h2>Recent Games</h2>
+                        <div id="recent-games-container"></div>
+                    </div>
+                    <div class="card stats-card">
+                        <h2>Stats Overview</h2>
+                        <div id="stats-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Game View -->
+            <section id="newgame-view" class="view hidden">
+                <div class="card">
+                    <h2>Start a New Game</h2>
+                    <form id="new-game-form">
+                        <div class="player-selection">
+                            <div class="player-select-container">
+                                <label for="player1">Player 1</label>
+                                <select id="player1" required></select>
+                            </div>
+                            <div class="vs-badge">VS</div>
+                            <div class="player-select-container">
+                                <label for="player2">Player 2</label>
+                                <select id="player2" required></select>
+                            </div>
+                        </div>
+                        <div class="game-options">
+                            <label>
+                                <input type="radio" name="game-type" value="11" checked> First to 11
+                            </label>
+                            <label>
+                                <input type="radio" name="game-type" value="21"> First to 21
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Start Game</button>
+                    </form>
+                </div>
+
+                <div id="active-game-container" class="hidden">
+                    <div class="card active-game">
+                        <h2>Current Game</h2>
+                        <div class="scoreboard">
+                            <div class="player-score">
+                                <h3 id="game-player1-name">Player 1</h3>
+                                <div class="score-controls">
+                                    <button id="p1-score-minus" class="score-btn"><i class="fas fa-minus"></i></button>
+                                    <div id="p1-score" class="score">0</div>
+                                    <button id="p1-score-plus" class="score-btn"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="score-divider">:</div>
+                            <div class="player-score">
+                                <h3 id="game-player2-name">Player 2</h3>
+                                <div class="score-controls">
+                                    <button id="p2-score-minus" class="score-btn"><i class="fas fa-minus"></i></button>
+                                    <div id="p2-score" class="score">0</div>
+                                    <button id="p2-score-plus" class="score-btn"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <button id="end-game-btn" class="btn-secondary">End Game</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Players View -->
+            <section id="players-view" class="view hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Players</h2>
+                        <button id="add-player-btn" class="btn-outline"><i class="fas fa-user-plus"></i> Add Player</button>
+                    </div>
+                    <div id="players-container">
+                        <!-- Players will be loaded here -->
+                    </div>
+                </div>
+                
+                <div id="add-player-modal" class="modal hidden">
+                    <div class="modal-content">
+                        <h2>Add New Player</h2>
+                        <form id="add-player-form">
+                            <div class="form-group">
+                                <label for="player-name">Name</label>
+                                <input type="text" id="player-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="player-email">Email (optional)</label>
+                                <input type="email" id="player-email">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" id="cancel-add-player" class="btn-secondary">Cancel</button>
+                                <button type="submit" class="btn-primary">Add Player</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History View -->
+            <section id="history-view" class="view hidden">
+                <div class="card">
+                    <h2>Game History</h2>
+                    <div class="filter-container">
+                        <input type="text" id="history-search" placeholder="Search games...">
+                        <select id="history-filter">
+                            <option value="all">All Games</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    <div id="history-container">
+                        <!-- Game history will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Office Ping Pong Tracker &copy; <span id="current-year"></span></p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/utils.js"></script>
+    <script src="js/dataService.js"></script>
+    <script src="js/playersService.js"></script>
+    <script src="js/gamesService.js"></script>
+    <script src="js/uiController.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
